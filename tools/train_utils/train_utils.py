@@ -219,6 +219,36 @@ class Trainer(object):
                             checkpoint_state(self.model, self.optimizer, trained_epoch, it), filename = ckpt_name,
                     )
 
+                    root_src_dir = '/content/RFNet/run/cityscapes/test/'
+                    root_target_dir = '/content/drive/MyDrive/Yeganeh_BSc/runv1/'
+                    operation = 'copy'  # 'copy' or 'move'
+                    print("Copy it to Drive : ", root_target_dir)
+
+                    for src_dir, dirs, files in os.walk(root_src_dir):
+
+                        dst_dir = src_dir.replace(root_src_dir, root_target_dir)
+
+                        if not os.path.exists(dst_dir):
+                            os.mkdir(dst_dir)
+
+                        for file_ in files:
+
+                            src_file = os.path.join(src_dir, file_)
+
+                            dst_file = os.path.join(dst_dir, file_)
+
+                            # if os.path.exists(dst_file):
+
+                            # os.remove(dst_file)
+
+                            if operation is 'copy':
+
+                                shutil.copy(src_file, dst_dir)
+
+                            elif operation is 'move':
+
+                                shutil.move(src_file, dst_dir)
+
                 # eval one epoch
                 if (epoch % eval_frequency) == 0:
                     pbar.close()
