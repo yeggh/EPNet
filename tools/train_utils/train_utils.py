@@ -219,7 +219,7 @@ class Trainer(object):
                             checkpoint_state(self.model, self.optimizer, trained_epoch, it), filename = ckpt_name,
                     )
 
-                    root_src_dir = '/content/RFNet/run/cityscapes/test/'
+                    root_src_dir = '/content/EPNet/tools/log/Car/full_epnet_without_iou_branch/ckpt/'
                     root_target_dir = '/content/drive/MyDrive/Yeganeh_BSc/runv1/'
                     operation = 'copy'  # 'copy' or 'move'
                     print("Copy it to Drive : ", root_target_dir)
