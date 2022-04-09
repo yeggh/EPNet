@@ -333,7 +333,7 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
         #if (init_iou_tmp >= 0.5):
         #    aspect_ratio_alpha = (aspect_ratio)/(aspect_ratio + init_iou_tmp)
         iou_tmp = init_iou_tmp - (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio
-        print("the diff with IoU: ", (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio)
+        #print("the diff with IoU: ", (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio)
 
         if use_iou_branch:
             iou_branch_pred_flat = iou_branch_pred.view(-1)
