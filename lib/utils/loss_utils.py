@@ -327,10 +327,11 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
         pred_area = torch.max(pred_size[:, 0] * pred_size[:, 1] * pred_size[:, 2], pred_size.new().resize_(pred_size[:, 2].shape).fill_(1e-3))
         tar_area = tar_size[:, 0] * tar_size[:, 1] * tar_size[:, 2]
         init_iou_tmp = insect_area/(pred_area+tar_area-insect_area)
-        aspect_ratio_alpha = 0
 
-        if (init_iou_tmp >= 0.5):
-            aspect_ratio_alpha = (aspect_ratio)/(aspect_ratio + init_iou_tmp)
+        aspect_ratio_alpha = (aspect_ratio) / (aspect_ratio + init_iou_tmp)
+        #aspect_ratio_alpha = 0
+        #if (init_iou_tmp >= 0.5):
+        #    aspect_ratio_alpha = (aspect_ratio)/(aspect_ratio + init_iou_tmp)
         iou_tmp = init_iou_tmp - (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio
         print("the diff with IoU: ", (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio)
 
