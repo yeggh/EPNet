@@ -322,7 +322,7 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
 
         center_dist = (pred_x - tar_x) ** 2 + (pred_y - tar_y) ** 2 + (pred_z - tar_z) ** 2
         diagonal_length = closure_x ** 2 + closure_y ** 2 + closure_z ** 2
-        aspect_ratio = (4/math.pi) * ((math.atan(pred_size[:, 2]/pred_size[:, 1]) - math.atan(tar_size[:, 2]/tar_size[:, 1])) ** 2)
+        aspect_ratio = (4/(torch.acos(torch.zeros(1)).item() * 2)) * ((torch.arctan(pred_size[:, 2]/pred_size[:, 1]) - torch.arctan(tar_size[:, 2]/tar_size[:, 1])) ** 2)
         insect_area = insect_x * insect_y * insect_z
         pred_area = torch.max(pred_size[:, 0] * pred_size[:, 1] * pred_size[:, 2], pred_size.new().resize_(pred_size[:, 2].shape).fill_(1e-3))
         tar_area = tar_size[:, 0] * tar_size[:, 1] * tar_size[:, 2]
