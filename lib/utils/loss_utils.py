@@ -328,7 +328,7 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
         tar_area = tar_size[:, 0] * tar_size[:, 1] * tar_size[:, 2]
         #iou_tmp = insect_area/(pred_area+tar_area-insect_area)
         aspect_ratio_alpha = 0
-        if (insect_area / (pred_area + tar_area - insect_area) >= 0.5):
+        if ((insect_area / (pred_area + tar_area - insect_area)) >= 0.5):
             aspect_ratio_alpha = (aspect_ratio)/(aspect_ratio + insect_area / (pred_area + tar_area - insect_area))
         iou_tmp = insect_area / (pred_area + tar_area - insect_area) - (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio
         print("the diff with IoU: ", (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio)
