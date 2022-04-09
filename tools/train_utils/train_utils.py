@@ -222,7 +222,7 @@ class Trainer(object):
                     )
 
                     root_src_dir = '/content/EPNet/tools/log/Car/full_epnet_without_iou_branch/ckpt/'
-                    root_target_dir = '/content/drive/MyDrive/Yeganeh_BSc/runv1/'
+                    root_target_dir = '/content/drive/MyDrive/Yeganeh_BSc/runv2/'
                     operation = 'copy'  # 'copy' or 'move'
                     print("Copy it to Drive : ", root_target_dir)
 
