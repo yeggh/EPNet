@@ -112,8 +112,7 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
     :return:
     """
     per_loc_bin_num = int(loc_scope / loc_bin_size) * 2
-    #loc_y_bin_num = int(loc_y_scope / loc_y_bin_size) * 2
-    loc_y_bin_num = int(loc_scope / loc_bin_size) * 2
+    loc_y_bin_num = int(loc_y_scope / loc_y_bin_size) * 2
 
     reg_loss_dict = { }
     loc_loss = 0
@@ -170,8 +169,8 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
 
         y_bin_onehot = torch.cuda.FloatTensor(y_bin_label.size(0), loc_y_bin_num).zero_()
         y_bin_onehot.scatter_(1, y_bin_label.view(-1, 1).long(), 1)
-
-        loss_y_bin = F.cross_entropy(pred_reg[:, y_bin_l: y_bin_r], y_bin_label)
+        print((pred_reg[:, y_res_l: y_res_r] * y_bin_onehot).size(), " ", )
+        loss_y_bin = F.cross_entropy(pred_reg[:, y_bin_l: y_bin_r], y_bin_onehot.size(), y_res_norm_label.size())
         loss_y_res = F.smooth_l1_loss((pred_reg[:, y_res_l: y_res_r] * y_bin_onehot).sum(dim = 1), y_res_norm_label)
 
         reg_loss_dict['loss_y_bin'] = loss_y_bin.item()
