@@ -112,7 +112,8 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
     :return:
     """
     per_loc_bin_num = int(loc_scope / loc_bin_size) * 2
-    loc_y_bin_num = int(loc_y_scope / loc_y_bin_size) * 2
+    #loc_y_bin_num = int(loc_y_scope / loc_y_bin_size) * 2
+    loc_y_bin_num = int(loc_scope / loc_bin_size) * 2
 
     reg_loss_dict = { }
     loc_loss = 0
