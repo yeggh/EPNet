@@ -329,7 +329,7 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
 
         tar_clause_x = torch.atan(tar_size[:, 2]/tar_size[:, 1])
         tar_clause_y = torch.atan(tar_size[:, 1] / tar_size[:, 0])
-        tar_clause_ = torch.atan(tar_size[:, 0] / tar_size[:, 1])
+        tar_clause_z = torch.atan(tar_size[:, 0] / tar_size[:, 1])
 
         aspect_ratio = 4/((torch.acos(torch.zeros(1)).item() * 2) ** 2) * ((pred_clause_x + pred_clause_y + pred_clause_z - tar_clause_x - tar_clause_y - tar_clause_z) ** 2)
         insect_area = insect_x * insect_y * insect_z
