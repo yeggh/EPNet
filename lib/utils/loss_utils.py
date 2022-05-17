@@ -156,7 +156,7 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
         loc_loss += loss_x_res + loss_z_res
 
     # y localization loss
-    get_y_by_bin = True
+    #get_y_by_bin = True
     if get_y_by_bin:
         y_bin_l, y_bin_r = start_offset, start_offset + loc_y_bin_num
         y_res_l, y_res_r = y_bin_r, y_bin_r + loc_y_bin_num
