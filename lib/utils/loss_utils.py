@@ -169,9 +169,6 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
 
         y_bin_onehot = torch.cuda.FloatTensor(y_bin_label.size(0), loc_y_bin_num).zero_()
         y_bin_onehot.scatter_(1, y_bin_label.view(-1, 1).long(), 1)
-        print("HERE!")
-        print((pred_reg[:, y_res_l: y_res_r]).size(), " ", y_bin_onehot.size(), y_res_norm_label.size())
-        print("HERE!!")
         loss_y_bin = F.cross_entropy(pred_reg[:, y_bin_l: y_bin_r], y_bin_label)
         loss_y_res = F.smooth_l1_loss((pred_reg[:, y_res_l: y_res_r] * y_bin_onehot).sum(dim=1), y_res_norm_label)
 
@@ -325,17 +322,30 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
 
         center_dist = (pred_x - tar_x) ** 2 + (pred_y - tar_y) ** 2 + (pred_z - tar_z) ** 2
         diagonal_length = closure_x ** 2 + closure_y ** 2 + closure_z ** 2
-        aspect_ratio = (4/(torch.acos(torch.zeros(1)).item() * 2)) * ((torch.atan(pred_size[:, 2]/pred_size[:, 1]) - torch.atan(tar_size[:, 2]/tar_size[:, 1])) ** 2)
+
+        pred_clause_x = torch.atan(pred_size[:, 2]/pred_size[:, 1])
+        pred_clause_y = torch.atan(pred_size[:, 1] / pred_size[:, 0])
+        pred_clause_z = torch.atan(pred_size[:, 0] / pred_size[:, 1])
+
+        tar_clause_x = torch.atan(tar_size[:, 2]/tar_size[:, 1])
+        tar_clause_y = torch.atan(tar_size[:, 1] / tar_size[:, 0])
+        tar_clause_ = torch.atan(tar_size[:, 0] / tar_size[:, 1])
+
+        aspect_ratio = 4/((torch.acos(torch.zeros(1)).item() * 2) ** 2) * ((pred_clause_x + pred_clause_y + pred_clause_z - tar_clause_x - tar_clause_y - tar_clause_z) ** 2)
         insect_area = insect_x * insect_y * insect_z
         pred_area = torch.max(pred_size[:, 0] * pred_size[:, 1] * pred_size[:, 2], pred_size.new().resize_(pred_size[:, 2].shape).fill_(1e-3))
         tar_area = tar_size[:, 0] * tar_size[:, 1] * tar_size[:, 2]
         init_iou_tmp = insect_area/(pred_area+tar_area-insect_area)
 
-        aspect_ratio_alpha = (aspect_ratio) / (aspect_ratio + init_iou_tmp)
+        with torch.no_grad():
+            S = 1 - init_iou_tmp
+            aspect_ratio_alpha = v / (S + v)
+        #aspect_ratio_alpha = (aspect_ratio) / (aspect_ratio + init_iou_tmp)
         #aspect_ratio_alpha = 0
         #if (init_iou_tmp >= 0.5):
         #    aspect_ratio_alpha = (aspect_ratio)/(aspect_ratio + init_iou_tmp)
         iou_tmp = init_iou_tmp - (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio
+        iou_tmp = torch.clamp(iou_tmp, min = -1.0, max = 1.0)
         #print("the diff with IoU: ", (center_dist / diagonal_length) - aspect_ratio_alpha * aspect_ratio)
 
         if use_iou_branch:
