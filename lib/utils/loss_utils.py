@@ -339,7 +339,7 @@ def get_reg_loss(cls_score, mask_score, pred_reg, reg_label, loc_scope, loc_bin_
 
         with torch.no_grad():
             S = 1 - init_iou_tmp
-            aspect_ratio_alpha = v / (S + v)
+            aspect_ratio_alpha = aspect_ratio / (S + aspect_ratio)
         #aspect_ratio_alpha = (aspect_ratio) / (aspect_ratio + init_iou_tmp)
         #aspect_ratio_alpha = 0
         #if (init_iou_tmp >= 0.5):
